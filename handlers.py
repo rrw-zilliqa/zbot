@@ -49,10 +49,13 @@ async def ask_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
         await update.message.reply_text("Please provide a question.")
         return
-    
-    query = ' '.join(context.args)
-    response = ai_helper.process_query(query)
-    await update.message.reply_text(response)
+
+    try:
+        query = ' '.join(context.args)
+        response = ai_helper.process_query(update, query)
+        await update.message.reply_text(response)
+    except Exception as e:
+        await update.message.reply_text(f"Error - {e}")
 
 async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("An error occurred. Please try again later.")
