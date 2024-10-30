@@ -9,7 +9,10 @@ from handlers import (
     balance_command,
     block_command,
     ask_command,
-    error_handler
+    error_handler,
+    whoami_handler,
+    faucet_handler,
+    send_zil_handler
 )
 
 # Configure logging
@@ -28,6 +31,9 @@ def main():
     application.add_handler(CommandHandler('balance', balance_command))
     application.add_handler(CommandHandler('block', block_command))
     application.add_handler(CommandHandler('ask', ask_command))
+    application.add_handler(CommandHandler('whoami', whoami_handler))
+    application.add_handler(CommandHandler('faucet', faucet_handler))
+    application.add_handler(CommandHandler('send', send_zil_handler))
 
     # Add error handler
     application.add_error_handler(error_handler)

@@ -3,3 +3,6 @@ logging >= 0.4.9.6
 web3 >= 7.4.0
 openai >= 1.52.2
 python-telegram-bot >= 21.6
+peewee >= 3.17.7
+eth_account >= 0.13.4
+
