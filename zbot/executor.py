@@ -1,9 +1,10 @@
 from telegram import Update
+import telegram.ext
 from telegram.ext import ContextTypes
 from .blockchain import BlockchainClient
 from .config import COMMAND_DESCRIPTIONS
 from . import blockchain
-from telegram.ext import ApplicationBuilder, CommandHandler
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler
 from . import utils
 from . import ai_helper
 import logging
@@ -26,7 +27,7 @@ def get_functions():
     functions = [ ]
     for act in ACTIONS:
         function = act.description()
-        logging.info("function = {function}")
+        logging.info(f"function = {function}")
         if function is not None:
             functions.append(function)
     return functions
@@ -67,10 +68,16 @@ async def handle_ask_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
     response = helper.process_query(update, query)
     await update.message.reply_text(response)
 
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    helper = ai_helper.AIHelper()
+    response = helper.process_query(update, update.message.text)
+    await update.message.reply_text(response)
+
 def add_commands(app):
     app.add_error_handler(wrap_handler(handle_error))
     app.add_handler(CommandHandler("help", wrap_handler(handle_help_command)))
     app.add_handler(CommandHandler("ask", wrap_handler(handle_ask_command)))
+    app.add_handler(MessageHandler(telegram.ext.filters.TEXT & ~telegram.ext.filters.COMMAND, handle_message))
     for act in ACTIONS:
         def create_handler(call_act):
             async def call_handler(update, context):

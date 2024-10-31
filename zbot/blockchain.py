@@ -74,9 +74,11 @@ class BlockchainClient:
             resp = requests.post(config.FAUCET_URL, data={'address': for_address})
             # Find a transaction id in the response
             resp_text = resp.text
+            logging.info(f"resp_text = {resp.text}")
             txn_id = re.search(r'(0x[0-9a-fA-F]{64})', resp_text)
             if txn_id:
-                receipt = self.blockchain.wait_for_receipt(txid)
+                logging.info(f"txn id {txn_id[0]}")
+                receipt = self.wait_for_receipt(txn_id[0])
                 logging.info(f"receipt {receipt}")
                 return (receipt.status==1, txn_id, None)
             else:

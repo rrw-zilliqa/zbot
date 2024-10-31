@@ -18,10 +18,12 @@ And then run `./main.py`; `/help` is moderately informative.
 Things you can (currently) ask:
 
 ```
-/ask run the faucet for me
-/ask what's my balance?
-/ask please send 0.1 zil to <address>
+run the faucet for me
+what's my balance?
+please send 0.1 zil to <address>
 ```
+
+`/ask` is a synonym for just messaging the bot.
 
 You can get an OpenAPI key from openAPI once you've funded your account.
 You can get a telegram bot token from @botfather.

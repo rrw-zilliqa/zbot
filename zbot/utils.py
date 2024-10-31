@@ -11,6 +11,12 @@ from . import blockchain
 class GiveUp(Exception):
     pass
 
+def bytes_from_hex(hex_in):
+    if hex_in.startsWith('0x'):
+        hex_in = hex_in[2:]
+
+    return bytes.fromhex(hex_in)
+
 def txn_id_to_hex(txid):
     return f"0x{txid.hex()}"
 
