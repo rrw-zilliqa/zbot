@@ -4,9 +4,9 @@ from web3 import Web3
 from eth_account import Account
 import secrets
 import binascii
-import config
+from . import config
 import logging
-import blockchain
+from . import blockchain
 
 def txn_id_to_hex(txid):
     return f"0x{txid.hex()}"

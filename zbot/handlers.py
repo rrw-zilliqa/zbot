@@ -1,13 +1,12 @@
 from telegram import Update
 from telegram.ext import ContextTypes
-from blockchain import BlockchainClient
-from ai_helper import AIHelper
-from config import COMMAND_DESCRIPTIONS
-import utils
+from .blockchain import BlockchainClient
+from .ai_helper import AIHelper
+from .config import COMMAND_DESCRIPTIONS
+from . import utils
 import logging
 
 blockchain_client = BlockchainClient()
-ai_helper = AIHelper()
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome_message = (
@@ -46,6 +45,7 @@ async def block_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(result)
 
 async def ask_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    ai_helper = AIHelper()
     if not context.args:
         await update.message.reply_text("Please provide a question.")
         return
@@ -95,14 +95,3 @@ async def faucet_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         await update.message.reply_text(f"Error - {e}")
 
-async def whoami_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    try:
-        user = utils.user_from_effective_sender(update.effective_sender)
-        account = utils.account_from_sender(update.effective_sender)
-        if user:
-            reply_text = f"I think you are {user} with address {account.address}"
-        else:
-            reply_text = "Cannot determine who you are - sorry"
-        await update.message.reply_text(reply_text)
-    except Exception as e:
-        logging.info(f"e - {e}")

@@ -2,8 +2,8 @@
 
 import logging
 from telegram.ext import ApplicationBuilder, CommandHandler
-from zbot.config import TELEGRAM_BOT_TOKEN
-from zbot.handlers import (
+from config import TELEGRAM_BOT_TOKEN
+from handlers import (
     start_command,
     help_command,
     balance_command,
@@ -13,7 +13,7 @@ from zbot.handlers import (
     faucet_handler,
     send_zil_handler
 )
-import zbot.executor as executor
+import executor
 
 # Configure logging
 logging.basicConfig(

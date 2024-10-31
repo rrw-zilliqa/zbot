@@ -1,9 +1,9 @@
 from web3 import Web3
 from web3.middleware import SignAndSendRawMiddlewareBuilder
-from config import ETHEREUM_RPC_URL
+from .config import ETHEREUM_RPC_URL
 from eth_account.signers.local import LocalAccount
 import logging
-import utils
+from . import utils
 
 def connect(account):
     client = BlockchainClient()
@@ -43,7 +43,7 @@ class BlockchainClient:
     def get_balance(self, address: str) -> str:
         try:
             if not self.w3.is_address(address):
-                return "Invalid Ethereum address"
+                return None
             # Force it to be a checksum address
             address = Web3.to_checksum_address(address)
             balance_wei = self.w3.eth.get_balance(address)
