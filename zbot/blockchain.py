@@ -3,6 +3,9 @@ from web3.middleware import SignAndSendRawMiddlewareBuilder
 from .config import ETHEREUM_RPC_URL
 from eth_account.signers.local import LocalAccount
 import logging
+import requests
+import re
+from . import config
 from . import utils
 
 def connect(account):
@@ -73,7 +76,7 @@ class BlockchainClient:
             resp_text = resp.text
             txn_id = re.search(r'(0x[0-9a-fA-F]{64})', resp_text)
             if txn_id:
-                receipt = this.blockchain.wait_for_receipt(txid)
+                receipt = self.blockchain.wait_for_receipt(txid)
                 logging.info(f"receipt {receipt}")
                 return (receipt.status==1, txn_id, None)
             else:

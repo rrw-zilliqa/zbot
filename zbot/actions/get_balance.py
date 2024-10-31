@@ -13,6 +13,9 @@ class GetBalanceAction(action.Action):
     def command_name(self):
         return "balance"
 
+    def command_help(self):
+        return "Retrieve the native balance of an address"
+
     def description(self):
         return  {
             "name": "get_balance",
@@ -30,28 +33,24 @@ class GetBalanceAction(action.Action):
         }
 
     async def handle(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        try:
-            await update.message.reply_text(f"A {self.blockchain_client}");
-            if context.args:
-                address = context.args[0]
-                result = self.blockchain_client.get_balance(address)
-                if result is None:
-                    await update.message.reply_markdown_v2(f("{address} is not valid"))
-                    return
-                url = utils.explore_address(address)
-                logging.info(f"address {address} url {url} result {result}")
-                await update.message.reply_markdown_v2(f"Balance of [{address}]({url}) is `{result}`")
-            else:
-                account = utils.account_from_sender(update.effective_sender)
-                result = self.blockchain_client.get_balance(account.address)
-                if result is None:
-                    await update.message.reply_markdown_v2(f("{address} is not valid"))
-                    return
-                url = utils.explore_address(account.address)
-                logging.info(f"address {account.address} url {url} result {result}")
-                await update.message.reply_markdown_v2(f"Balance of [{account.address}]({url}) is `{result}`")
-        except Exception as e:
-            await update.message.reply_text(f"Error - {e}")
+        if context.args:
+            address = context.args[0]
+            result = self.blockchain_client.get_balance(address)
+            if result is None:
+                await update.message.reply_markdown_v2(f("{address} is not valid"))
+                return
+            url = utils.explore_address(address)
+            logging.info(f"address {address} url {url} result {result}")
+            await update.message.reply_markdown_v2(f"Balance of [{address}]({url}) is `{result}`")
+        else:
+            account = utils.account_from_sender(update.effective_sender)
+            result = self.blockchain_client.get_balance(account.address)
+            if result is None:
+                await update.message.reply_markdown_v2(f("{address} is not valid"))
+                return
+            url = utils.explore_address(account.address)
+            logging.info(f"address {account.address} url {url} result {result}")
+            await update.message.reply_markdown_v2(f"Balance of [{account.address}]({url}) is `{result}`")
 
     def try_function_call(self, update: Update, function_name: str, arguments):
         if function_name != "get_balance":

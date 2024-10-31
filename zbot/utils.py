@@ -8,6 +8,9 @@ from . import config
 import logging
 from . import blockchain
 
+class GiveUp(Exception):
+    pass
+
 def txn_id_to_hex(txid):
     return f"0x{txid.hex()}"
 

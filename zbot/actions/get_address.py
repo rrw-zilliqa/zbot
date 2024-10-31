@@ -13,6 +13,9 @@ class GetAddressAction(action.Action):
     def command_name(self):
         return "whoami"
 
+    def command_help(self):
+        return "Retrieve your blockchain address (warning! this script knows your private key)"
+
     def description(self):
         # OpenAI doesn't believe in parameterless functions
         return {
@@ -29,16 +32,13 @@ class GetAddressAction(action.Action):
         }
 
     async def whoami_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        try:
-            user = utils.user_from_effective_sender(update.effective_sender)
-            account = utils.account_from_sender(update.effective_sender)
-            if user:
-                reply_text = f"I think you are {user} with address {account.address}"
-            else:
-                reply_text = "Cannot determine who you are - sorry"
-            await update.message.reply_text(reply_text)
-        except Exception as e:
-            logging.info(f"e - {e}")
+        user = utils.user_from_effective_sender(update.effective_sender)
+        account = utils.account_from_sender(update.effective_sender)
+        if user:
+            reply_text = f"I think you are {user} with address {account.address}"
+        else:
+            reply_text = "Cannot determine who you are - sorry"
+        await update.message.reply_text(reply_text)
 
     def try_function_call(self, update: Update, function_name: str, arguments):
         if function_name != "get_my_address":
